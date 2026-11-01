@@ -1,0 +1,9 @@
+# Market Mobiles Sales : (Pie Plot)
+
+mobiles=["Samsung","IQOO","Apple","Redmi","Motorola"]
+Sales=[15000,35000,24000,50000,40000]
+explode=(0,0,0,0.1,0)
+plt.pie(Sales,labels=mobiles,explode=explode,autopct="%1.2f%%")
+plt.title("Market Mobiles Sales")
+plt.grid(True)
+plt.show()

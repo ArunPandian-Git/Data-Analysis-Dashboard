@@ -1,0 +1,136 @@
+# Sample business dataset
+data = { "Date": ["2026-01-01", "2026-01-05", "2026-01-10", "2026-01-15",
+                  "2026-02-01", "2026-02-05", "2026-02-10", "2026-02-15",
+                  "2026-03-01", "2026-03-05", "2026-03-10", "2026-03-15"],
+
+         "Product": ["Laptop", "Mobile", "Tablet", "Laptop",
+                     "Mobile", "Tablet", "Laptop", "Mobile",
+                     "Tablet", "Laptop", "Mobile", "Tablet"],
+
+         "Sales": [80000, 50000, 30000, 90000,
+                   60000, 35000, 95000, 55000,
+                   40000, 100000, 65000, 45000],
+
+         "Profit": [12000, 8000, 5000, 15000,
+                    9000, 6000, 16000, 8500,
+                    7000, 18000, 10000, 7500],
+
+         "Quantity": [10, 25, 15, 12,
+                      30, 18, 14, 28,
+                      22, 15, 32, 25],
+
+         "Region": [ "North", "South", "East", "North",
+                     "South", "East", "West", "West",
+                     "East", "North", "South", "West"]}
+
+df = pd.DataFrame(data)
+
+# Convert Date column to datetime
+df["Date"] = pd.to_datetime(df["Date"])
+
+# Create dashboard
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+# -------------------------------------------------
+# 1. Sales Trend
+# -------------------------------------------------
+daily_sales = df.groupby("Date")["Sales"].sum()
+
+axes[0, 0].plot(daily_sales.index,daily_sales.values,
+                marker="o",label="Sales")
+axes[0, 0].set_title("Sales Trend")
+axes[0, 0].set_xlabel("Date")
+axes[0, 0].set_ylabel("Sales")
+axes[0, 0].legend()
+axes[0, 0].grid(True)
+
+# Annotate highest sales
+max_date = daily_sales.idxmax()
+max_sales = daily_sales.max()
+
+axes[0, 0].annotate(
+    f"Highest Sales: {max_sales}",
+    xy=(max_date, max_sales),
+    xytext=(max_date, max_sales + 10000),
+    arrowprops=dict(arrowstyle="->")
+)
+
+# -------------------------------------------------
+# 2. Profit Trend
+# -------------------------------------------------
+daily_profit = df.groupby("Date")["Profit"].sum()
+
+axes[0, 1].bar(
+    daily_profit.index,
+    daily_profit.values,
+    label="Profit"
+)
+
+axes[0, 1].set_title("Daily Profit")
+axes[0, 1].set_xlabel("Date")
+axes[0, 1].set_ylabel("Profit")
+axes[0, 1].legend()
+axes[0, 1].tick_params(axis="x", rotation=45)
+
+# Annotate highest profit
+max_profit_date = daily_profit.idxmax()
+max_profit = daily_profit.max()
+
+axes[0, 1].annotate(
+    f"Highest Profit: {max_profit}",
+    xy=(max_profit_date, max_profit),
+    xytext=(max_profit_date, max_profit + 2000),
+    arrowprops=dict(arrowstyle="->")
+)
+
+# -------------------------------------------------
+# 3. Product Performance
+# -------------------------------------------------
+product_sales = df.groupby("Product")["Sales"].sum()
+
+bars = axes[1, 0].bar(
+    product_sales.index,
+    product_sales.values,
+    label="Sales"
+)
+
+axes[1, 0].set_title("Product Performance")
+axes[1, 0].set_xlabel("Product")
+axes[1, 0].set_ylabel("Total Sales")
+axes[1, 0].legend()
+
+# Add value labels
+for bar in bars:
+    height = bar.get_height()
+    axes[1, 0].text(
+        bar.get_x() + bar.get_width() / 2,
+        height,
+        f"{height:,.0f}",
+        ha="center",
+        va="bottom"
+    )
+
+# -------------------------------------------------
+# 4. Regional Performance
+# -------------------------------------------------
+region_sales = df.groupby("Region")["Sales"].sum()
+
+axes[1, 1].pie(
+    region_sales.values,
+    labels=region_sales.index,
+    autopct="%1.1f%%",
+    startangle=90
+)
+
+axes[1, 1].set_title("Regional Sales Performance")
+
+# -------------------------------------------------
+# Dashboard title and layout
+# -------------------------------------------------
+fig.suptitle(
+    "Business Performance Dashboard",
+    fontsize=18
+)
+
+plt.tight_layout()
+plt.show()

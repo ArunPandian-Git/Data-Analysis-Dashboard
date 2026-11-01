@@ -1,0 +1,21 @@
+# Employee Salary Analysis: (Horizontal Plot)
+
+names = ["Arun", "Kumar", "Priya", "Rahul", "Divya", "Suresh"]
+departments = ["IT", "HR", "Finance", "IT", "Sales", "Finance"]
+salaries = [55000, 45000, 75000, 65000, 50000, 90000]
+max_salary = max(salaries)
+max_index = salaries.index(max_salary)
+colors = ["skyblue"] * len(salaries)
+colors[max_index] = "orange"
+plt.figure(figsize=(9, 5))
+plt.barh(names, salaries, color=colors)
+for i, salary in enumerate(salaries):
+    plt.text(salary + 1000, i, f"₹{salary:,}", va="center")
+plt.xlabel("Salary")
+plt.ylabel("Employee")
+plt.title("Employee Salary Analysis")
+plt.tight_layout()
+plt.show()
+print("Highest-paid employee:", names[max_index])
+print("Salary: ₹", max_salary)
+print("Department:", departments[max_index])

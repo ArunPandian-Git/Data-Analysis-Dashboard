@@ -1,0 +1,13 @@
+# Customer Age Distribution: (Histo Bar Plot)
+
+np.random.seed(50)
+ages = np.random.randint(0, 101, 200)
+average_age = np.mean(ages)
+plt.figure(figsize=(10, 6))
+plt.hist(ages, bins=10, edgecolor='black')
+plt.axvline( average_age,linestyle='--',linewidth=3,label=f'Average Age = {average_age:2f}')
+plt.title('Customer Age Distribution')
+plt.xlabel('Age')
+plt.ylabel('Number of Customers')
+plt.legend()
+plt.show()
